@@ -7,6 +7,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(3000);
 
+  if (process.env.NODE_ENV == "production") app.enableCors({ origin: ["https://production.url"] });
+  if (process.env.NODE_ENV != "production") app.enableCors({ origin: "*" });
+
+
   if (module.hot) {
     module.hot.accept();
     module.hot.dispose(() => app.close());
