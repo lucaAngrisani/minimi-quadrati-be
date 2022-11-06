@@ -1,6 +1,8 @@
 import { AN } from "../calculate.service";
+import { PointDto } from "../dto/point.dto";
 
 export class MQ {
+    id?: string;
     mediaX: number;
     mediaY: number;
     delta: number;
@@ -13,4 +15,5 @@ export class MQ {
     incertezzaB: number;
     analisiX: AN;
     analisiY: AN;
+    points?: PointDto[];
 };

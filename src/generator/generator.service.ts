@@ -26,15 +26,14 @@ export class GeneratorService {
     const calculated = this.calculateService.MinimiQuadrati(xArr, yArr);
     const mqName = randomUUID();
 
-    const mq = await this.neode.merge('MQ', { name: mqName, ...calculated });
+    const mq = await this.neode.merge('MQ', { id: mqName, });
 
     // store points in neo4j
     await Promise.all(points.map(async (p) => {
       const pointId = `${p.x}|${p.y}|${p.deltaY}`;
 
       const point = await this.neode.merge('Point', { id: pointId, x: p.x, y: p.y, deltaY: p.deltaY });
-      point.relateTo(mq, 'HAS');
-
+      point.relateTo(mq, 'IS_IN');
     }));
 
     return calculated;

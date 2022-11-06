@@ -1,8 +1,9 @@
+import { RelationshipSchema } from 'neode';
 import { SchemaObject } from 'neode';
 
 const PointSchema: SchemaObject = {
     id: {
-        type: 'uuid',
+        type: 'string',
         primary: true,
         required: true,
     },
@@ -19,6 +20,13 @@ const PointSchema: SchemaObject = {
         type: 'float',
         required: true,
     },
+    IS_IN: {
+        type: 'relationship',
+        target: 'MQ',
+        relationship: 'IS_IN',
+        direction: "out",
+        eager: false,
+    }
 };
 
 export default PointSchema;
