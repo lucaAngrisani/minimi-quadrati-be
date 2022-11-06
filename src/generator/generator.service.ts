@@ -1,54 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CalculateService } from './calculate.service';
 import { PointDto } from './dto/point.dto';
 import { MQ } from './entities/mq.entity';
-import { Neo4jService } from '@nhogs/nestjs-neo4j';
 import { randomUUID } from 'crypto';
+import * as Neode from 'neode';
 
 @Injectable()
 export class GeneratorService {
-  constructor(private calculateService: CalculateService, private readonly neo4jService: Neo4jService) { }
+  constructor(private calculateService: CalculateService,
+    @Inject('Connection') private readonly neode: Neode
+  ) { }
 
   async generate(points: PointDto[]): Promise<MQ> {
     const xArr: number[] = points.map((p) => p.x)
     const yArr: number[] = points.map((p) => p.y)
 
+    if (!xArr.length || !yArr.length) {
+      throw new BadRequestException("BAD_ARR_LENGTH", "Array length cannot be 0")
+    }
+
+    if (xArr.length != yArr.length) {
+      throw new BadRequestException("DIFF_ARR_LENGTH", "Array length cannot be different")
+    }
+
     const calculated = this.calculateService.MinimiQuadrati(xArr, yArr);
     const mqName = randomUUID();
 
-    await this.neo4jService.run(
-      {
-        cypher: 'CREATE (c:`MQ`) SET c=$props RETURN properties(c) AS mq',
-        parameters: {
-          props: { ...calculated, name: mqName },
-        },
-      },
-      { write: true },
-    );
+    const mq = await this.neode.merge('MQ', { name: mqName, ...calculated });
 
-
-    // store points in neo4j and generate a shortlink
+    // store points in neo4j
     await Promise.all(points.map(async (p) => {
       const pointId = `${p.x}|${p.y}|${p.deltaY}`;
 
-      // create point
-      await this.neo4jService.run(
-        {
-          cypher: 'CREATE (c:`Point`) SET c=$props RETURN properties(c) AS point',
-          parameters: {
-            props: { ...p, id: pointId },
-          },
-        },
-        { write: true },
-      );
+      const point = await this.neode.merge('Point', { id: pointId, x: p.x, y: p.y, deltaY: p.deltaY });
+      point.relateTo(mq, 'HAS');
 
-      // create relation with mq
-      this.neo4jService.run({
-        cypher: `MERGE (mq:MQ { name: ${mqName} })
-        MERGE (p:Point { id: ${pointId} })
-        MERGE (mq)-[:HAS]->(p)
-        `
-      })
     }));
 
     return calculated;
