@@ -1,7 +1,5 @@
-import { Relationship, Node } from "@nhogs/nestjs-neo4j";
 import { AN } from "../calculate.service";
 
-@Node({ label: 'MQ' })
 export class MQ {
     mediaX: number;
     mediaY: number;
@@ -16,8 +14,3 @@ export class MQ {
     analisiX: AN;
     analisiY: AN;
 };
-
-@Relationship({ type: 'HAS' })
-export class WorkInDto {
-
-}

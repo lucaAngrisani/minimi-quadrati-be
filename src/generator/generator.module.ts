@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { GeneratorService } from './generator.service';
-import { GeneratorController } from './generator.controller';
-import { CalculateService } from './calculate.service';
 import { NeodeModule } from 'neode-nestjs';
+import { CalculateService } from './calculate.service';
+import { GeneratorController } from './generator.controller';
+import { GeneratorService } from './generator.service';
 import PointSchema from './schema/point.schema';
 
 @Module({
