@@ -1,4 +1,3 @@
-import { RelationshipSchema } from 'neode';
 import { SchemaObject } from 'neode';
 
 const PointSchema: SchemaObject = {

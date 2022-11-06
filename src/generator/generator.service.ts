@@ -36,6 +36,14 @@ export class GeneratorService {
       point.relateTo(mq, 'IS_IN');
     }));
 
+    calculated.points = points;
+    calculated.id = mqName;
     return calculated;
+  }
+
+  async findOne(id: string): Promise<MQ> {
+    const mq = await this.neode.find('MQ', id);
+    console.log(await mq.toJson());
+    return (await mq?.toJson()) as MQ;
   }
 }
