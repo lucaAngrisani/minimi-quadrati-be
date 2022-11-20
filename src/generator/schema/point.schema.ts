@@ -20,7 +20,7 @@ const PointSchema: SchemaObject = {
         required: true,
     },
     IS_IN: {
-        type: 'relationship',
+        type: 'relationships',
         target: 'MQ',
         relationship: 'IS_IN',
         direction: "out",

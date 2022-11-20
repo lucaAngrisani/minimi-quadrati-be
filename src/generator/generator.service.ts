@@ -26,7 +26,7 @@ export class GeneratorService {
     const calculated = this.calculateService.MinimiQuadrati(xArr, yArr);
     const mqName = randomUUID();
 
-    const mq = await this.neode.merge('MQ', { id: mqName, });
+    const mq = await this.neode.merge('MQ', { id: mqName, ...calculated, analisiX: JSON.stringify(calculated.analisiX), analisiY: JSON.stringify(calculated.analisiY) });
 
     // store points in neo4j
     await Promise.all(points.map(async (p) => {
@@ -43,7 +43,16 @@ export class GeneratorService {
 
   async findOne(id: string): Promise<MQ> {
     const mq = await this.neode.find('MQ', id);
-    console.log(await mq.toJson());
-    return (await mq?.toJson()) as MQ;
+    if (mq) {
+      let mqDB: any = await mq.toJson();
+      mqDB.analisiX = JSON.parse(mqDB.analisiX);
+      mqDB.analisiY = JSON.parse(mqDB.analisiY);
+      let mqJSON = { ...mqDB };
+      mqJSON.points = mqJSON.IS_IN.map(rel => rel.node);
+      console.log(mqJSON);
+      return <MQ>mqJSON;
+    } else {
+      return null;
+    }
   }
 }
