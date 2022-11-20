@@ -49,7 +49,6 @@ export class GeneratorService {
       mqDB.analisiY = JSON.parse(mqDB.analisiY);
       let mqJSON = { ...mqDB };
       mqJSON.points = mqJSON.IS_IN.map(rel => rel.node);
-      console.log(mqJSON);
       return <MQ>mqJSON;
     } else {
       return null;
