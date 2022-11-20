@@ -14,9 +14,14 @@ export class GeneratorController {
     return await this.generatorService.generate(points);
   }
 
-  @Get('/:id')
+  @Get('find/:id')
   findOne(@Param('id') id: string) {
     return this.generatorService.findOne(id);
+  }
+
+  @Get('count')
+  countMQ() {
+    return this.generatorService.count();
   }
 
 }

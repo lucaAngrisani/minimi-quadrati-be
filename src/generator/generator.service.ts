@@ -54,4 +54,8 @@ export class GeneratorService {
       return null;
     }
   }
+
+  async count(): Promise<number> {
+    return (await this.neode.all('MQ')).length;
+  }
 }
