@@ -3,7 +3,6 @@ import { ConfigModule } from '@nestjs/config';
 import { ConfigService } from '@nestjs/config/dist';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NeodeModule } from 'neode-nestjs';
 import { TransformInterceptor } from './app.interceptor';
 import config from './config';
 import { CalculateService } from './generator/calculate.service';
@@ -20,7 +19,6 @@ import { UserModule } from './user/user.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => configService.get("database"),
     }),
-    NeodeModule.forRoot(),
     UserModule,
     GeneratorModule
   ],
