@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MQ } from './entities/mq.entity';
+import { MQDto } from './dto/mq.dto';
 
 export type SD = {
     scarti: number[],
@@ -200,7 +200,7 @@ export class CalculateService {
         return incertezzaB;
     }
 
-    MinimiQuadrati(x: number[], y: number[]): MQ {
+    MinimiQuadrati(x: number[], y: number[]): MQDto {
         const lenX = x.length;
         const lenY = y.length;
 

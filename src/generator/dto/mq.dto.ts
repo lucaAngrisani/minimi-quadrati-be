@@ -1,7 +1,7 @@
 import { AN } from "../calculate.service";
-import { PointDto } from "../dto/point.dto";
+import { PointDto } from "./point.dto";
 
-export class MQ {
+export class MQDto {
     id?: string;
     mediaX: number;
     mediaY: number;

@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseInterceptors } from '@nestjs/common';
 import { TransformInterceptor } from 'src/app.interceptor';
+import { MQDto } from './dto/mq.dto';
 import { PointDto } from './dto/point.dto';
-import { MQ } from './entities/mq.entity';
 import { GeneratorService } from './generator.service';
 
 @Controller('generator')
@@ -10,7 +10,7 @@ export class GeneratorController {
   constructor(private readonly generatorService: GeneratorService) { }
 
   @Post()
-  async generate(@Body() points: PointDto[]): Promise<MQ> {
+  async generate(@Body() points: PointDto[]): Promise<MQDto> {
     return await this.generatorService.generate(points);
   }
 
